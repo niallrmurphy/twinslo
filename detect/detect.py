@@ -18,8 +18,14 @@ class Detect():
 		self.bad_success = 0.25
 		self.data = pd.get_dummies(self.df.filter(categories))
 
-	def inflict_damage(self, target='customer212'):
-		self.df.success_rate = self.df.apply(bad_time, axis=1, customer=target)
+	# These functions should be merged but I'm making this explicit for now
+	def inflict_specific_customer_damage(self, target='customer212'):
+		self.df.success_rate = self.df.apply(specific_customer_bad_time,
+									   		 axis=1, customer=target)
+		
+	def inflict_specific_region_damage(self, target='region5'):
+		self.df.success_rate = self.df.apply(specific_region_bad_time,
+									   		 axis=1, region=target)
 
 	def analyse(self):
 		self.model.fit(self.data, self.df.success_rate < self.threshold)
@@ -42,8 +48,15 @@ class Detect():
 		pprint.pprint(self.model.tree_.feature)
 		pprint.pprint(self.model.tree_.value)
 
-
-def bad_time(x, customer='customer212'):
+def specific_customer_bad_time(x, customer='customer212'):
+	"""Give this specific customer a bad time."""
 	if x.customer == customer:
+		return 0.25
+	return x.success_rate
+
+
+def specific_region_bad_time(x, region='region5'):
+	"""Give this specific region a bad time."""
+	if x.region == region:
 		return 0.25
 	return x.success_rate

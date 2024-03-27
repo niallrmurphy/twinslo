@@ -18,8 +18,10 @@ class MonitoringData():
         self.mu, self.sigma = 3., 1. # mean and standard deviation
 
     def generate(self):
-        """Generate data for testing. 3000 rows, with region being purely
-        randomly selected, language being biased towards 0th element."""
+        """Generate data for testing."""
+        # 3000 rows, with region being purely randomly selected, language 
+        # being biased towards 0th element. It is expected this will more accurately
+        # represent a real-world scenario than pure random on every axis.
         self.data = {
 	        'customer': [f'customer{x}' for x in range(3000)],
 	        'region': [f'region{x}' for x in np.random.choice(range(20), 3000)],
